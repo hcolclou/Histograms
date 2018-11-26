@@ -36,7 +36,7 @@ twoDtree & twoDtree::operator=(const twoDtree & rhs){
 }
 
 /* twoDtree constructor */
-twoDtree::twoDtree(PNG & imIn){ 
+twoDtree::twoDtree(PNG & imIn){
 /* your code here */
 }
 
@@ -53,7 +53,7 @@ PNG twoDtree::render(){
 }
 
 /* prune function modifies tree by cutting off
- * subtrees whose leaves are all within tol of 
+ * subtrees whose leaves are all within tol of
  * the average pixel value contained in the root
  * of the subtree
  */
@@ -76,6 +76,3 @@ void twoDtree::copy(const twoDtree & orig){
 /* your code here */
 
 }
-
-
-

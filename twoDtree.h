@@ -39,15 +39,15 @@ private:
    public:
       Node(pair<int,int> ul, pair<int,int> lr, HSLAPixel a); // Node constructor
 
-      pair<int,int> upLeft; 
+      pair<int,int> upLeft;
       pair<int,int> lowRight;
       HSLAPixel avg;
       Node * LT; // left or top child rectangle
       Node * RB; // right or bottom child rectangle
-      
+
    };
-	
-   
+
+
 public:
 
    /* =============== start of given functions ====================*/
@@ -57,7 +57,7 @@ public:
     * Destroys all of the memory associated with the
     * current twoDtree. This function should ensure that
     * memory does not leak on destruction of a twoDtree.
-    * 
+    *
     * @see twoDtree_given.cpp
     */
    ~twoDtree();
@@ -81,37 +81,37 @@ public:
    /**
     * Constructor that builds a twoDtree out of the given PNG.
     * Every leaf in the tree corresponds to a pixel in the PNG.
-    * Every non-leaf node corresponds to a rectangle of pixels 
-    * in the original PNG, represented by an (x,y) pair for the 
-    * upper left corner of the rectangle and an (x,y) pair for 
+    * Every non-leaf node corresponds to a rectangle of pixels
+    * in the original PNG, represented by an (x,y) pair for the
+    * upper left corner of the rectangle and an (x,y) pair for
     * lower right corner of the rectangle. In addition, the Node
-    * stores a pixel representing the average color over the 
-    * rectangle. 
+    * stores a pixel representing the average color over the
+    * rectangle.
     *
     * Every node's left and right children correspond to a partition
     * of the node's rectangle into two smaller rectangles. The node's
-    * rectangle is split by the horizontal or vertical line that 
+    * rectangle is split by the horizontal or vertical line that
     * results in the two smaller rectangles whose Information Gain
     * is as large as possible. (or correspondingly, whose weighted
     * sum of entropies is as small as possible. see online spec.)
     *
-    * Note that splits will alternate between vertical and 
-    * horizontal, at every level of the tree, beginning with a 
+    * Note that splits will alternate between vertical and
+    * horizontal, at every level of the tree, beginning with a
     * vertical split. A 1xw rectangle will only have vertical
-    * splits remaining, and a hx1 rectangle will only have 
+    * splits remaining, and a hx1 rectangle will only have
     * horizontal splits remaining.
     *
     * The LT child of the node will contain the upper left corner
     * of the node's rectangle, and the RB child will contain the
     * lower right corner. (see illustrations within the spec.)
     *
-   * This function will build the stats object used to score the 
+   * This function will build the stats object used to score the
    * splitting lines. It will also call helper function buildTree.
     */
    twoDtree(PNG & imIn);
 
    /**
-    * Overloaded assignment operator for twoDtrees. 
+    * Overloaded assignment operator for twoDtrees.
     * Part of the Big Three that we must define because the class
     * allocates dynamic memory. This depends on your implementation
     * of the copy and clear funtions.
@@ -123,18 +123,18 @@ public:
    /**
     * Render returns a PNG image consisting of the pixels
     * stored in the tree. may be used on pruned trees. Draws
-    * every leaf node's rectangle onto a PNG canvas using the 
+    * every leaf node's rectangle onto a PNG canvas using the
     * average color stored in the node.
     */
    PNG render();
 
    /*
     *  Prune function trims subtrees as high as possible in the tree.
-    *  A subtree is pruned (cleared) if all of the subtree's leaves are within 
-    *  tol of the average color stored in the root of the subtree. 
-    *  Pruning criteria should be evaluated on the original tree, not 
+    *  A subtree is pruned (cleared) if all of the subtree's leaves are within
+    *  tol of the average color stored in the root of the subtree.
+    *  Pruning criteria should be evaluated on the original tree, not
     *  on any pruned subtree. (we only expect that trees would be pruned once.)
-    *  
+    *
    * You may want a recursive helper function for this one.
     */
    void prune(double tol);

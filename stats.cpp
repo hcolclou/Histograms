@@ -1,6 +1,24 @@
 
 #include "stats.h"
 
+vector<int> operator+(const vector<int>& v1, const vector<int>& v2) {
+    assert(v1.size() == v2.size());
+    vector<int> res;
+    for (unsigned int i = 0; i < v1.size(); i++) {
+        res.push_back(v1[i] + v2[i]);
+    }
+    return res;
+}
+
+vector<int> operator-(const vector<int>& v1, const vector<int>& v2) {
+    assert(v1.size() == v2.size());
+    vector<int> res;
+    for (unsigned int i = 0; i < v1.size(); i++) {
+        res.push_back(v1[i] + v2[i]);
+    }
+    return res;
+}
+
 stats::stats(PNG & im){
     for (unsigned int x = 0; x < im.width(); x++) {
         vector<double> colHueX;
@@ -37,15 +55,11 @@ stats::stats(PNG & im){
             colSumLum += pixel.l;
             colSumHist[pixel.h / 10]++;
 
-            for (unsigned int i = 0; i < 36; i++) {
-                histSum[i] += colSumHist[i];
-            }
-
             colHueX.push_back(hueXSumToLeft + colSumHueX);
             colHueY.push_back(hueYSumToLeft + colSumHueY);
             colSat.push_back(satSumToLeft + colSumSat);
             colLum.push_back(lumSumToLeft + colSumLum);
-            colHist.push_back(histSum);
+            colHist.push_back(histSum + colSumHist);
         }
 
         sumHueX.push_back(colHueX);
@@ -67,21 +81,35 @@ HSLAPixel stats::getAvg(pair<int,int> ul, pair<int,int> lr){
 }
 
 double stats::entropy(pair<int,int> ul, pair<int,int> lr){
+    int x1 = ul.first - 1;
+    int y1 = ul.second - 1;
+    int x2 = lr.first;
+    int y2 = lr.second;
 
     vector<int> distn;
+    double entropy = 0;
 
-    /* using private member hist, assemble the distribution over the
-    *  given rectangle defined by points ul, and lr into variable distn.
-    *  You will use distn to compute the entropy over the rectangle.
-    *  if any bin in the distn has frequency 0, then do not add that
-    *  term to the entropy total. see .h file for more details.
-    */
+    assert(x2 > x1 && y2 > y1);
 
-    /* my code includes the following lines:
-        if (distn[i] > 0 )
-            entropy += ((double) distn[i]/(double) area)
-                                    * log2((double) distn[i]/(double) area);
-    */
+    if (x1 >= 0 && y1 >= 0) {
+         distn = hist[x2][y2] - (hist[x1][y2] + (hist[x2][y1] - hist[x1][y1]));
+    } else if (x1 >= 0) {
+         distn = hist[x2][y2] - hist[x1][y2];
+    } else if (y1 >= 0) {
+         distn = hist[x2][y2] - hist[x2][y1];
+    } else {
+         distn = hist[x2][y2];
+    }
 
-    return  -1;
+    long area = rectArea(ul, lr);
+    cout << area << endl;
+
+    for (unsigned int i = 0; i < distn.size(); i++) {
+        if (distn[i] > 0 ) {
+            cout << distn[i] << endl;
+            entropy += ((double) distn[i]/(double) area) * log2((double) distn[i]/(double) area);
+        }
+    }
+
+    return -1 * entropy;
 }

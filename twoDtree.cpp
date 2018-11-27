@@ -41,15 +41,16 @@ bool twoDtree::Node::allInTol(HSLAPixel main, double tol) {
         if (LT != NULL) {
             ret &= LT->allInTol(avg, tol);
         }
-        if (RT != NULL) {
+        if (RB != NULL) {
             ret &= RB->allInTol(avg, tol);
         }
+        return ret;
     }
 }
 
 void twoDtree::Node::prune(double tol) {
     if (LT != NULL && RB != NULL) {
-        if (allInTol(avg, tol) {
+        if (allInTol(avg, tol)) {
             clear();
         } else {
             if (LT != NULL) {
@@ -67,9 +68,9 @@ void twoDtree::Node::render(PNG& im) {
         LT->render(im);
         RB->render(im);
     } else {
-        for (unsigned int x = upLeft.first; x < lowRight.first; x++) {
-            for (unsigned int y = upLeft.second; y < lowRight.second; y++) {
-                *(im->getPixel(x, y)) = avg;
+        for (int x = upLeft.first; x < lowRight.first; x++) {
+            for (int y = upLeft.second; y < lowRight.second; y++) {
+                *(im.getPixel(x, y)) = avg;
             }
         }
     }
@@ -112,30 +113,40 @@ twoDtree::Node * twoDtree::buildTree(stats & s, pair<int,int> ul, pair<int,int> 
         if (vert || width == 1) {
             vector<double> dist;
 
-            for (unsigned int y = ul.second; y < lr.second - 1; y++) {
+            for (int y = ul.second; y < lr.second - 1; y++) {
                 pair<int, int> middle = make_pair(lr.first, y);
                 pair<int, int> middlep1 = make_pair(ul.first, y + 1);
                 dist.push_back(s.rectArea(ul, middle) * s.entropy(ul, middle)
                     + s.rectArea(middlep1, lr) * s.entropy(middlep1, lr));
             }
 
-            double min = min_element(dist.begin(), dist.end());
-            offset = find(dist.rbegin(), dist.rend(), min);
+            double min = dist[0];
+            for (unsigned int i = 0; i < dist.size(); i++) {
+                if (min > dist[i]) {
+                    min = dist[i];
+                    offset = i;
+                }
+            }
 
             newNode->LT = buildTree(s, ul, make_pair(lr.first, ul.second + offset), !vert);
             newNode->RB = buildTree(s, make_pair(ul.first, ul.second + offset + 1), lr, !vert);
         } else {
             vector<double> dist;
 
-            for (unsigned int x = ul.first; x < lr.first - 1; x++) {
+            for (int x = ul.first; x < lr.first - 1; x++) {
                 pair<int, int> middle = make_pair(x, ul.second);
                 pair<int, int> middlep1 = make_pair(x + 1, lr.second);
                 dist.push_back(s.rectArea(ul, middle) * s.entropy(ul, middle)
                     + s.rectArea(middlep1, lr) * s.entropy(middlep1, lr));
             }
 
-            double min = min_element(dist.begin(), dist.end());
-            offset = find(dist.rbegin(), dist.rend(), min);
+            double min = dist[0];
+            for (unsigned int i = 0; i < dist.size(); i++) {
+                if (min > dist[i]) {
+                    min = dist[i];
+                    offset = i;
+                }
+            }
 
             newNode->LT = buildTree(s, ul, make_pair(ul.first + offset, lr.second), !vert);
             newNode->RB = buildTree(s, make_pair(ul.first + offset + 1, ul.second), lr, !vert);

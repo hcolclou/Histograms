@@ -3,6 +3,24 @@
 #include <stdio.h>
 #include <cmath>
 
+vector<int> operator+(const vector<int>& v1, const vector<int>& v2) {
+    assert(v1.size() == v2.size());
+    vector<int> res;
+    for (unsigned int i = 0; i < v1.size(); i++) {
+        res.push_back(v1[i] + v2[i]);
+    }
+    return res;
+}
+
+vector<int> operator-(const vector<int>& v1, const vector<int>& v2) {
+    assert(v1.size() == v2.size());
+    vector<int> res;
+    for (unsigned int i = 0; i < v1.size(); i++) {
+        res.push_back(v1[i] + v2[i]);
+    }
+    return res;
+}
+
 stats::stats(PNG & im){
 
   for (unsigned int x = 0; x < im.width(); x++) {

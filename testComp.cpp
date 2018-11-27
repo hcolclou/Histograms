@@ -66,7 +66,7 @@ TEST_CASE("stats::basic entropy","[weight=1][part=stats]"){
 TEST_CASE("twoDtree::basic ctor render","[weight=1][part=twoDtree]"){
     PNG img;
     img.readFromFile("images/ada.png");
-
+    
     twoDtree t1(img);
 
     PNG out = t1.render();

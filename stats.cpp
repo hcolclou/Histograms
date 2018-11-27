@@ -75,7 +75,6 @@ HSLAPixel stats::getAvg(pair<int,int> ul, pair<int,int> lr){
   // sums over entire  block
   double x = sumHueX[x2][y2];
   double y = sumHueY[x2][y2];
-printf("x = %f; y = %f \n", x, y);
   if (y1 == 0 && x1 == 0) {
     // subtract nothing
   } else {
@@ -86,7 +85,6 @@ printf("x = %f; y = %f \n", x, y);
 
 
   int as = sumSat[x2][y2];
-  printf("(sumsat) as = %f\n", as);
   if (y1 == 0 && x1 == 0) {
     // subtract nothing
   } else {
@@ -94,11 +92,9 @@ printf("x = %f; y = %f \n", x, y);
   }
   // get average saturation
   double avgsat = as/rectArea(ul, lr);
-  printf("avg sat  = %f\n", avgsat);
 
 
   double al = sumLum[x2][y2];
-  printf("(sumlum) al = %f\n", al);
   if (y1 == 0 && x1 == 0) {
     // subtract nothing
   } else {
@@ -106,7 +102,6 @@ printf("x = %f; y = %f \n", x, y);
   }
   // get average saturation
   double avglum = al/(double) rectArea(ul, lr);
-  printf("avg lum  = %f\n", avglum);
 
 
   HSLAPixel *avgpixel = new HSLAPixel(avghue, avgsat, avglum);

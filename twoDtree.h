@@ -45,6 +45,11 @@ private:
       Node * LT; // left or top child rectangle
       Node * RB; // right or bottom child rectangle
 
+      void clear();
+      Node* copy();
+      bool allInTol(HSLAPixel avg, double tol);
+      void prune(double tol);
+      void render(PNG& img);
    };
 
 

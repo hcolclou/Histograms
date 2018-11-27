@@ -102,11 +102,9 @@ double stats::entropy(pair<int,int> ul, pair<int,int> lr){
     }
 
     long area = rectArea(ul, lr);
-    cout << area << endl;
 
     for (unsigned int i = 0; i < distn.size(); i++) {
         if (distn[i] > 0 ) {
-            cout << distn[i] << endl;
             entropy += ((double) distn[i]/(double) area) * log2((double) distn[i]/(double) area);
         }
     }

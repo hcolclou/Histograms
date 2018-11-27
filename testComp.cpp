@@ -23,7 +23,7 @@ TEST_CASE("stats::basic rectArea","[weight=1][part=stats]"){
     REQUIRE(result == 4);
 
 }
-/*
+
 TEST_CASE("stats::basic getAvg","[weight=1][part=stats]"){
     PNG data; data.resize(2,2);
     for (int i = 0; i < 2; i ++){
@@ -43,7 +43,6 @@ TEST_CASE("stats::basic getAvg","[weight=1][part=stats]"){
 
     REQUIRE(result == expected);
 }
-*/
 
 TEST_CASE("stats::basic entropy","[weight=1][part=stats]"){
     PNG data; data.resize(2,2);
@@ -74,6 +73,7 @@ TEST_CASE("twoDtree::basic ctor render","[weight=1][part=twoDtree]"){
 
     REQUIRE(out==img);
 }
+
 TEST_CASE("twoDtree::basic copy","[weight=1][part=twoDtree]"){
     PNG img;
     img.readFromFile("images/ada.png");

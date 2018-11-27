@@ -63,7 +63,7 @@ namespace cs221util {
     for (unsigned i = 0; i < width_ * height_; i++) {
       HSLAPixel & p1 = imageData_[i];
       HSLAPixel & p2 = other.imageData_[i];
-      if (!(p1 == p2)) { 
+      if (!(p1 == p2)) {
         cout << "x: " << i%width_ << " y: " << i/width_ << " "<< p1 << " " << p2 << endl; flag = false; }
     }
 

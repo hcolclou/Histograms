@@ -155,11 +155,14 @@ private:
     */
 
    Node* root; // ptr to the root of the twoDtree
+   stats myStats;
 
    int height; // height of PNG represented by the tree
    int width; // width of PNG represented by the tree
 
    /* =================== private helper function declarations ======= */
+
+   double getWeightedEntropy(pair<int, int> ul, pair<int, int> lr);
 
     /* place your helper function declarations here */
 
@@ -190,7 +193,7 @@ private:
    * @param lr lower right point of current node's rectangle.
    * @param vert indicates if the split should be vertical or not.
    */
-   Node * buildTree(stats & s,pair<int,int> ul, pair<int,int> lr,bool vert);
+   Node * buildTree(pair<int,int> ul, pair<int,int> lr,bool vert);
 
    /* =================== end of private PA3 functions ============== */
 };

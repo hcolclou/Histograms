@@ -22,7 +22,6 @@ vector<int> operator-(const vector<int>& v1, const vector<int>& v2) {
 }
 
 stats::stats(PNG & im){
-
   for (unsigned int x = 0; x < im.width(); x++) {
           vector<double> colHueX;
           vector<double> colHueY;

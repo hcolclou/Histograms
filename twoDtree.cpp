@@ -41,7 +41,7 @@ twoDtree::Node* twoDtree::Node::copy() {
 
 bool twoDtree::Node::allInTol(HSLAPixel main, double tol) {
     if (LT == NULL && RB == NULL) {
-        return main.dist(avg) < tol;
+        return main.dist(avg) <= tol;
     } else {
         bool ret = true;
         if (LT != NULL) {
@@ -114,22 +114,37 @@ double twoDtree::getWeightedEntropy(pair<int, int> ul, pair<int, int> lr) {
     return area * entropy;
 }
 
-/* buildTree helper for twoDtree constructor */
 twoDtree::Node * twoDtree::buildTree(pair<int,int> ul, pair<int,int> lr, bool vert) {
     Node* newNode = new Node(ul, lr, myStats.getAvg(ul, lr));
     int height = lr.second - ul.second + 1;
     int width = lr.first - ul.first + 1;
 
     if (height > 1 || width > 1) {
-        if ((!vert || width == 1) && height != 1) {
-            unsigned int offset;
+        bool doHorizontalCut;
 
+        if (vert) {
+            if (width == 1) {
+                doHorizontalCut = true;
+            } else {
+                doHorizontalCut = false;
+            }
+        } else {
+            if (height == 1) {
+                doHorizontalCut = false;
+            } else {
+                doHorizontalCut = true;
+            }
+        }
+
+        if (doHorizontalCut) {
+            unsigned int offset;
             double min = -1;
+
             for (int y = ul.second; y < lr.second; y++) {
                 pair<int, int> middle = make_pair(lr.first, y);
                 pair<int, int> middlep1 = make_pair(ul.first, y + 1);
                 double val = getWeightedEntropy(ul, middle) + getWeightedEntropy(middlep1, lr);
-                if (min == -1 || min > val) {
+                if (min == -1 || min >= val) {
                     min = val;
                     offset = y;
                 }
@@ -139,14 +154,13 @@ twoDtree::Node * twoDtree::buildTree(pair<int,int> ul, pair<int,int> lr, bool ve
             newNode->RB = buildTree(make_pair(ul.first, offset + 1), lr, !vert);
         } else {
             unsigned int offset;
-            vector<double> dist;
-
             double min = -1;
+
             for (int x = ul.first; x < lr.first; x++) {
                 pair<int, int> middle = make_pair(x, lr.second);
                 pair<int, int> middlep1 = make_pair(x + 1, ul.second);
                 double val = getWeightedEntropy(ul, middle) + getWeightedEntropy(middlep1, lr);
-                if (min == -1 || min > val) {
+                if (min == -1 || min >= val) {
                     min = val;
                     offset = x;
                 }

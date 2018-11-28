@@ -39,7 +39,27 @@ TEST_CASE("stats::basic getAvg","[weight=1][part=stats]"){
     pair<int,int> ul(0,0);
     pair<int,int> lr(1,1);
     HSLAPixel result = s.getAvg(ul,lr);
-    HSLAPixel expected(112.5,1.0, 0.5);
+    HSLAPixel expected(112.5, 1.0, 0.5);
+
+    REQUIRE(result == expected);
+}
+
+TEST_CASE("stats::complex getAvg","[weight=1][part=stats]"){
+    PNG data; data.resize(2,2);
+    for (int i = 0; i < 2; i ++){
+        for (int j = 0; j < 2; j++){
+            HSLAPixel * p = data.getPixel(i,j);
+            p->h = 135*j + i * 90;
+            p->s = 1.0 / (j * i + 1);
+            p->l = 0.5 / (j * i + 1);
+            p->a = 1.0 / (j * i + 1);
+        }
+    }
+    stats s(data);
+    pair<int,int> ul(1,1);
+    pair<int,int> lr(1,1);
+    HSLAPixel result = s.getAvg(ul,lr);
+    HSLAPixel expected(225, 0.5, 0.25);
 
     REQUIRE(result == expected);
 }
@@ -62,7 +82,7 @@ TEST_CASE("stats::basic entropy","[weight=1][part=stats]"){
 
     REQUIRE(result == 2);
 }
-/*
+
 TEST_CASE("twoDtree::basic ctor render","[weight=1][part=twoDtree]"){
     PNG img;
     img.readFromFile("images/ada.png");
@@ -84,24 +104,19 @@ TEST_CASE("twoDtree::basic copy","[weight=1][part=twoDtree]"){
     PNG out = t1copy.render();
 
     REQUIRE(out==img);
-}*/
+}
 
 TEST_CASE("twoDtree::basic prune","[weight=1][part=twoDtree]"){
     PNG img;
     img.readFromFile("images/color.png");
-    cout << "here" << endl;
 
     twoDtree t1(img);
-    cout << "here" << endl;
 
     PNG prePrune = t1.render();
-    cout << "here" << endl;
 
     t1.prune(0.05);
-    cout << "here" << endl;
     PNG result = t1.render();
     result.writeToFile("images/prune_out.png");
-    cout << "here" << endl;
     PNG expected; expected.readFromFile("images/given-color.05.png");
 
     REQUIRE(expected==result);
